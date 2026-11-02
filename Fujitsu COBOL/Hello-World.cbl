@@ -3,14 +3,14 @@
 000020
 000030 PROGRAM-ID.     Hello-World.
 000040 AUTHOR.         Bill Roberts.
-000050 INSTALLATION.   IBM-PC running Windows 11.
+000050 INSTALLATION.   IBM-PC running Windows XP sp3.
 000060 DATE-WRITTEN.   29 October 2026.
 000070 DATE-COMPILED.  29 October 2026.
 000080 SECURITY.       This program does not process sensitive data.
 000090
 000100*****************************************************************
 000110*    The purpose of this program, as well as to write a 
-000120*    traditional 'hello world!' program is to demonstrate good 
+000120*    traditional 'Hello world!' program, is to demonstrate good 
 000130*    program design, compliance with modern practices in variable 
 000140*    naming, and modular programming in the Procedure Division.
 000150*****************************************************************
@@ -43,6 +43,7 @@
 000420     PERFORM 0100-PROGRAM-START.
 000430     PERFORM 0200-HELLO.
 000440     PERFORM 0300-END-PROGRAM.
+           STOP RUN.
 000450
 000460 SUBROUTINES SECTION.
 000470
@@ -61,5 +62,4 @@
 000600     DISPLAY "*************************************************".
 000610     DISPLAY "Program terminating normally.".
 000620     DISPLAY " ".
-000630     STOP RUN.
 000640
