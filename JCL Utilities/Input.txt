@@ -1,4 +1,0 @@
-00001ALAN TURING         0550000                                                
-00002GRACE HOPPER        0750000                                                
-00003ADA LOVELACE        0625000                                                
-00004JOHN VON NEUMANN    0480050                                                
