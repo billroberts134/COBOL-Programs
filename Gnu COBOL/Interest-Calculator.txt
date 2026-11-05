@@ -1,0 +1,184 @@
+000010 IDENTIFICATION DIVISION.
+000020 PROGRAM-ID.     Interest-Calculator.
+000030 AUTHOR.         John  Bailey.
+      *     This program was updated and amended by Bill Roberts.
+000040 INSTALLATION.   IBM-PC.
+000050 DATE-WRITTEN.   5 November 2026.
+000060 DATE-COMPILED.  5 November 2026.
+000070 SECURITY.       This program does not process sensitive data.
+000080
+000100*****************************************************************
+000110*    This program is an updated version of the Simple-
+      *    Interest-Calc program from pages 30 and 31 of 'Modern COBOL
+      *    Programming for Beginners' by John Bailey.  THis program 
+      *    accepts as input an investment amount in pounds sterling,
+      *    an interest rate, and an investment period in years and 
+      *    calculates a new investment balance after interest has been 
+      *    added and displays the results on the screen.
+000157*****************************************************************
+000160
+000170*****************************************************************
+000180*Change History.
+000190*    4 November 2026.  Bill Roberts.   No change ID.
+000200*    In amending this program, I have added to the documentation
+      *    in the Identification Division, added an Environment 
+      *    Division.  I have also added a Special Names clause and 
+      *    changed the currency sign to '£', and improved the interface
+      *    by adding three 'With No Advancing' clauses to the output 
+      *    display statements and slso added an 'End-Program'
+      *    subroutine.
+000210*****************************************************************
+000230 ENVIRONMENT DIVISION.
+000240 CONFIGURATION SECTION.
+000270 SOURCE-COMPUTER.    IBM-PC.
+000280 OBJECT-COMPUTER.    IBM-PC.
+000290
+000291 SPECIAL-NAMES.
+000292     CURRENCY SIGN IS '£'.
+000295
+000300 DATA DIVISION.
+000310 WORKING-STORAGE SECTION.
+000330 01  WS-Variables.
+000331     05 WS-Principal              PIC 9(9)V99 VALUE ZERO.
+000332     05 WS-Interest-Rate          PIC 9V9999 VALUE ZERO.
+000333     05 WS-Interest-Times-100     PIC 99V9999 VALUE ZERO.
+000334     05 WS-Time-in-Years          PIC 99 VALUE ZERO.
+000335     05 WS-Interest-Amount        PIC 9(7)V99 VALUE ZERO.
+000336     05 WS-Total-Amount           PIC 9(9)V99 VALUE ZERO.
+000337     05 WS-Formatted-Total-Amount PIC £££,£££,££9.99 VALUE ZERO.
+000338     05 WS-Formatted-Principal    PIC £££,£££,££9.99 VALUE ZERO.
+000339     05 WS-Formatted-Interest     PIC ££,£££,££9.99 VALUE ZERO.
+000340     05 WS-Formatted-Time-in-Years PIC Z9 VALUE ZERO.
+000341     05 WS-Input-Buffer           PIC X(10) VALUE SPACES.
+000342     05 WS-Temp-Numeric           PIC S9(9)V9999 VALUE ZERO.
+000343
+000344 01  WS-Loop-Control              PIC X(1) VALUE 'N'.
+000345 01  WS-Main-Loop-Control         PIC X(1) VALUE 'Y'.
+000346     88 Want-to-Continue          VALUE 'Y', 'y'.
+000347     88 Want-to-Quit              VALUE 'N', 'n'.
+000348     88 Valid-Exit-Response       VALUE 'Y', 'y', 'N', 'n'.
+000350
+000360 PROCEDURE DIVISION.
+000380 MAIN-PROCEDURE SECTION.
+000400 0000-MAIN.
+000410     PERFORM UNTIL Want-to-Quit
+000420         PERFORM 0100-GET-INPUT-VALUES
+000430         PERFORM 0200-CALCULATE-INTEREST
+000431         PERFORM 0300-DISPLAY-RESULTS
+000432         DISPLAY ' '
+000433         MOVE SPACES TO WS-Main-Loop-Control
+000434         PERFORM UNTIL Valid-Exit-Response
+000435             DISPLAY 'Perform another calculation? (Y/N): '
+000436                 WITH NO ADVANCING
+000437             ACCEPT WS-Main-Loop-Control
+000438             IF NOT Valid-Exit-Response
+000439                DISPLAY 'Invalid choice.  Enter Y or N'
+000440             END-IF
+000441         END-PERFORM
+000442     END-PERFORM.    
+000443     PERFORM 0400-END-PROGRAM.
+000444     STOP RUN.
+000450
+000460 SUBROUTINES SECTION.
+000480 0100-GET-INPUT-VALUES.
+000481     MOVE 'N' TO WS-Loop-Control.
+000482     PERFORM UNTIL WS-Loop-Control = 'Y'
+000483         MOVE SPACES TO WS-Input-Buffer
+000484         DISPLAY "Input principal (1 to 99,999,999): "
+000485             WITH NO ADVANCING   
+000486         ACCEPT WS-Input-Buffer
+000487         IF WS-Input-Buffer(1:1) = '-'
+000488             DISPLAY "Error: Value cannot be negative."
+000489         ELSE
+000490             IF FUNCTION TEST-NUMVAL(WS-Input-Buffer) = 0
+000491                 COMPUTE WS-Temp-Numeric = 
+000492                         FUNCTION NUMVAL(WS-Input-Buffer)
+000493                 IF WS-Temp-Numeric >= 1.00 AND 
+000494                    WS-Temp-Numeric <= 99999999.99
+000495                     MOVE WS-Temp-Numeric TO WS-Principal
+000496                     MOVE 'Y' TO WS-Loop-Control
+000497                 ELSE
+000498                     DISPLAY "Range error: 1 to 99,999,999."
+000499                 END-IF
+000500             ELSE
+000501                 DISPLAY "Error: input must be numeric."
+000502             END-IF
+000503         END-IF
+000504     END-PERFORM.
+000505
+000506     MOVE 'N' TO WS-Loop-Control.
+000507     PERFORM UNTIL WS-Loop-Control = 'Y'
+000508         MOVE SPACES TO WS-Input-Buffer
+000509         DISPLAY "Input rate e.g. 0.05 for 5%: "
+000510             WITH NO ADVANCING   
+000511         ACCEPT WS-Input-Buffer
+000512         IF WS-Input-Buffer(1:1) = '-'
+000513             DISPLAY "Error: Value cannot be negative."
+000514         ELSE
+000515             IF FUNCTION TEST-NUMVAL(WS-Input-Buffer) = 0
+000516                 COMPUTE WS-Temp-Numeric = 
+000517                         FUNCTION NUMVAL(WS-Input-Buffer)
+000518                 IF WS-Temp-Numeric >= 0.0000 AND 
+000519                    WS-Temp-Numeric <= 1.0000
+000520                     MOVE WS-Temp-Numeric TO WS-Interest-Rate
+000521                     MOVE 'Y' TO WS-Loop-Control
+000522                 ELSE
+000523                     DISPLAY "Range error: 0.00 to 1.00."
+000524                 END-IF
+000525             ELSE
+000526                 DISPLAY "Error: input must be numeric."
+000527             END-IF
+000528         END-IF
+000529         MULTIPLY WS-Interest-Rate BY 100 GIVING 
+000530             WS-Interest-Times-100
+000531     END-PERFORM.
+000532               
+000533     MOVE 'N' TO WS-Loop-Control.
+000534     PERFORM UNTIL WS-Loop-Control = 'Y'
+000535         MOVE SPACES TO WS-Input-Buffer
+000536         DISPLAY "Input period in years (1 to 99): "
+000537             WITH NO ADVANCING   
+000538         ACCEPT WS-Input-Buffer
+000539         IF WS-Input-Buffer(1:1) = '-'
+000540             DISPLAY "Error: Value cannot be negative."
+000541         ELSE
+000542             IF FUNCTION TEST-NUMVAL(WS-Input-Buffer) = 0
+000543                 COMPUTE WS-Temp-Numeric = 
+000544                         FUNCTION NUMVAL(WS-Input-Buffer)
+000545                 IF WS-Temp-Numeric >= 1 AND 
+000546                    WS-Temp-Numeric <= 99
+000547                     MOVE WS-Temp-Numeric TO WS-Time-in-Years
+000548                     MOVE 'Y' TO WS-Loop-Control
+000549                 ELSE
+000550                     DISPLAY "Range error: 1 to 99."
+000551                 END-IF
+000552             ELSE
+000553                 DISPLAY "Error: input must be numeric."
+000554             END-IF
+000555         END-IF
+000556     END-PERFORM.
+000557
+000560 0200-CALCULATE-INTEREST.
+000561     COMPUTE WS-INTEREST-AMOUNT =  
+000562         WS-PRINCIPAL * WS-Interest-Rate * WS-Time-in-Years.
+000563     ADD WS-Principal WS-Interest-Amount GIVING WS-Total-Amount.
+000564
+000570 0300-DISPLAY-RESULTS.
+000571     DISPLAY ' '.
+000572     DISPLAY '=======Simple Interest Calculator======'.
+000573     MOVE WS-Principal TO WS-Formatted-Principal.
+000574     DISPLAY "Principal:        " WS-Formatted-Principal.
+000575     DISPLAY "Interest rate:    " WS-Interest-Times-100 "%".
+000576     MOVE WS-Time-in-Years to     WS-Formatted-Time-in-Years.
+000577     DISPLAY "Time period:      " WS-Formatted-Time-in-Years
+000578             " years".
+000579     MOVE WS-Interest-Amount to   WS-Formatted-Interest.
+000580     DISPLAY "Interest earned:  " WS-Formatted-Interest.
+000581     MOVE WS-Total-Amount to      WS-Formatted-Total-Amount.
+000582     DISPLAY "Total amount =    " WS-Formatted-Total-Amount.
+000583
+000590 0400-END-PROGRAM.
+000591     DISPLAY " ". 
+000600     DISPLAY "****************************************".
+000610     DISPLAY "Program terminating normally.".
+000620     DISPLAY " ".
