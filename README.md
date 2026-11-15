@@ -42,4 +42,4 @@ Across all projects in this repository, I follow enterprise mainframe developmen
 
 ## Contact
 * **GitHub:** (https://github.com/billroberts134/COBOL-Programs/edit/main/)
-* **LinkedIn:** (ww.linkedin.com/in/bill-e-roberts/)
+* **LinkedIn:** (www.linkedin.com/in/bill-e-roberts/)
