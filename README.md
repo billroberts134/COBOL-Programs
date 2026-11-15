@@ -18,4 +18,4 @@ If you are hiring for entry-level mainframe operations, batch support, or junior
 
 ## Contact
 * **GitHub:** (https://github.com/billroberts134/COBOL-Programs/edit/main/)
-* **LinkedIn:** (www.linkedin.com/in/bill-e-roberts/)
+* **LinkedIn:** (https://www.linkedin.com/in/bill-e-roberts/)
