@@ -1,0 +1,2 @@
+# Program Design
+This folder contains the program designs for the COBOL programs located in the COBOL folder.  Each of the files contains documentation for one of the programs in the COBOL folders.
