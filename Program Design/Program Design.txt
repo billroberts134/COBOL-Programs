@@ -1,2 +1,10 @@
 # Program Design
-This folder contains the program designs for the COBOL programs located in the COBOL folder.  Each of the files contains documentation for one of the programs in the COBOL folders.
+
+This folder contains the program designs for the COBOL programs located in the COBOL folders:
+
+* [Fujitsu COBOL](../Fujitsu%20COBOL)
+* [Gnu COBOL](../Gnu%20COBOL)
+* [Mainframe COBOL](../Mainframe%20COBOL)
+
+Each filed in this folder contains the design documentation for one of the programs in these folders.  
+Please note that in some cases there are duplicate programs in these folders.
